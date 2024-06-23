@@ -17,6 +17,9 @@ import {
   fetchSpecialIngredientMeal,
 } from "./Redux/Productslice.ts";
 import Cart from "./components/Cart.tsx";
+import LoginPage from "./components/Authentication/LoginPage.tsx";
+import SignUp from "./components/Authentication/SignUp.tsx";
+import LoginLanding from "./components/Authentication/LoginLanding.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -44,6 +47,21 @@ const router = createBrowserRouter([
   {
     path: "/cart",
     element: <Cart />,
+  },
+  {
+    path: "/Landing",
+    element: <LoginLanding />,
+    children: [
+      {
+        path: "/Landing/login",
+        element: <LoginPage />,
+        index: true,
+      },
+      {
+        path: "/Landing/Signup",
+        element: <SignUp />,
+      },
+    ],
   },
 ]);
 store.dispatch(fetchProduct());

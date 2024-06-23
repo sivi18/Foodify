@@ -19,7 +19,7 @@ const navigation: {
   social: [
     {
       name: "GitHub",
-      href: "https://github.com/ansub",
+      href: "https://github.com/Siranjivipandi-S/",
       icon: (props: React.SVGProps<SVGSVGElement>) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -32,7 +32,7 @@ const navigation: {
     },
     {
       name: "LinkedIn",
-      href: "https://linkedin.com/in/ansub",
+      href: "https://linkedin.com/in/siranjivipandi-s-24717a24b",
       icon: (props: React.SVGProps<SVGSVGElement>) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path

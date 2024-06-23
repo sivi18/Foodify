@@ -41,11 +41,7 @@ function Navbar() {
               Menu
             </Link>
           </li>
-          <li>
-            <Link className="font-sans p-2 text-lg text-white hover:text-orange-300 rounded-lg">
-              About
-            </Link>
-          </li>
+
           <li>
             <Link
               className="p-2 flex gap-2 text-white hover:text-orange-300"
@@ -53,6 +49,14 @@ function Navbar() {
             >
               <FaCartShopping size={25} className="move-animation" />
               Cart
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={"/Landing/login"}
+              className="font-sans p-2 text-lg text-white hover:text-orange-300 rounded-lg"
+            >
+              Login
             </Link>
           </li>
         </ul>
