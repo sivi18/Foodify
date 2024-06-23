@@ -6,6 +6,7 @@ import { FaCartShopping } from "react-icons/fa6";
 import { RootState } from "@reduxjs/toolkit/query";
 import { ProductsCart } from "./BreakFast";
 import { AddtoCart } from "../../Redux/CartSlice";
+import toast from "react-hot-toast";
 
 function AllCategory() {
   const Getproducts = useSelector((state: RootState) =>
@@ -23,6 +24,8 @@ function AllCategory() {
           price: product.price,
         })
       );
+
+      toast.success("Add to Cart");
     } catch (error) {
       console.log(error);
     }

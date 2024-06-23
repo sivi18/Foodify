@@ -4,6 +4,7 @@ import { selectAllBreakfasts } from "../../Redux/Productslice";
 import { Link } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
 import { AddtoCart } from "../../Redux/CartSlice";
+import toast from "react-hot-toast";
 export interface ProductsCart {
   idMeal: string;
   strMeal: string;
@@ -25,6 +26,8 @@ function BreakFast() {
         price: product.price,
       })
     );
+
+    toast.success("Add to Cart");
   };
   return (
     <>

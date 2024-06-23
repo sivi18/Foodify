@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
 import { ProductsCart } from "./Category/BreakFast";
 import { AddtoCart } from "../Redux/CartSlice";
+import toast from "react-hot-toast";
 
 function MainIngredients() {
   const MainIngrediants = useSelector((state: RootState) =>
@@ -22,6 +23,7 @@ function MainIngredients() {
           price: product.price,
         })
       );
+      toast.success("Add to Cart");
     } catch (error) {
       console.log(error);
     }

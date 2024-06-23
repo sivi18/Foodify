@@ -8,6 +8,7 @@ import {
 } from "../Redux/CartSlice";
 import { FaCartShopping } from "react-icons/fa6";
 import React from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 function Cart() {
   const Carts = useSelector((state: ProductsCart[]) =>
@@ -34,6 +35,7 @@ function Cart() {
     try {
       console.log(id);
       await dispatch(DeleteCartEvent(id));
+      toast.success("Product removed from cart successfully");
     } catch (error) {
       console.log(error);
     }
@@ -42,6 +44,7 @@ function Cart() {
     <div className="flex flex-col min-h-screen bg-slate-900">
       <div className="flex flex-col">
         <Navbar />
+        <Toaster />
         <div className="flex flex-col mt-20">
           <h1 className="text-5xl text-orange-400 text-center mt-8 hover:scale-105 transition-transform">
             Cart Section

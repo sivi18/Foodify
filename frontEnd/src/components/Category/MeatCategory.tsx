@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
 import { ProductsCart } from "./BreakFast";
 import { AddtoCart } from "../../Redux/CartSlice";
+import toast from "react-hot-toast";
 
 function MeatCategory() {
   const dispatch = useDispatch();
@@ -25,6 +26,8 @@ function MeatCategory() {
           price: product.price,
         })
       );
+
+      toast.success("Add to Cart");
     } catch (error) {
       console.log(error);
     }

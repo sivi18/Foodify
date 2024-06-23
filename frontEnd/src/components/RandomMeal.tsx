@@ -5,6 +5,7 @@ import { selectAllRandomMeals, fetchRandomMeal } from "../Redux/Productslice";
 import { FaCartShopping } from "react-icons/fa6";
 import { ProductsCart } from "./Category/BreakFast";
 import { AddtoCart } from "../Redux/CartSlice";
+import toast from "react-hot-toast";
 
 function RandomMeal() {
   const dispatch = useDispatch();
@@ -26,6 +27,8 @@ function RandomMeal() {
           price: product.price,
         })
       );
+
+      toast.success("Add to Cart");
     } catch (error) {
       console.log(error);
     }

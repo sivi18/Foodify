@@ -5,6 +5,7 @@ import Menu from "./components/Menu";
 import MainIngredients from "./components/MainIngredients";
 import RandomMeal from "./components/RandomMeal";
 import Footer from "./components/footer";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         className="relative min-w-full h-screen bg-cover bg-center bgimage z-20"
         style={{ backgroundImage: "url('./src/assets/hero-bg.jpg')" }}
       >
+        <Toaster position="top-center" />
         <Navbar />
         <GreetComp />
       </div>
