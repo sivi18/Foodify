@@ -52,7 +52,8 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
-  res.status(200).json({ message: "Login successful", token });
+  const { _id, username } = user;
+  res.status(200).json({ _id, username, token });
 });
 
 module.exports = { signupUser, loginUser };

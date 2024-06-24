@@ -61,7 +61,7 @@ function RandomMeal() {
             </div>
             <div className="flex flex-col z-20 mt-56 ml-4 gap-4">
               <h2 className="text-2xl text-green-300 select-none">
-                {randomMeal[0].strMeal}
+                {`${randomMeal[0].strMeal.slice(0, 30)}..`}
               </h2>
               <div className="flex items-center justify-between gap-4">
                 <p className="text-lg text-white select-none flex gap-1">

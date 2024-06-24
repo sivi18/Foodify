@@ -10,7 +10,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
-  "proxy": "http://127.0.0.1:6000",
+  "proxy": "http://127.0.0.1:5000",
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
     "@reduxjs/toolkit": "^2.2.5",

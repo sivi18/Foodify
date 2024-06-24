@@ -9,11 +9,11 @@ import { RootState } from "./store"; // Adjust the import based on your store fi
 
 // Define the User interface
 interface User {
-  _id: string;
-  username: string;
+  _id?: string;
+  username?: string;
+  token: string;
 }
 
-// Create an entity adapter for users
 const userAdapter = createEntityAdapter<User>({
   selectId: (user) => user._id,
 });
@@ -30,6 +30,9 @@ export const LoginDispatch = createAsyncThunk<User, User>(
   async (userData) => {
     try {
       const response = await axios.post<User>(`${baseUrl}/login`, userData);
+      if (response) {
+        sessionStorage.setItem("token", response.data.token);
+      }
       return response.data;
     } catch (error) {
       console.error(error);

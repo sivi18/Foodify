@@ -1,6 +1,9 @@
-import { promise, z } from "zod";
+import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDispatch } from "react-redux";
+import { signupDispatch } from "../../Redux/loginslice";
+import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   username: z.string(),
@@ -9,7 +12,7 @@ const schema = z.object({
 });
 type HookformType = z.infer<typeof schema>;
 
-function LoginPage() {
+function SignUp() {
   const {
     formState: { errors },
     handleSubmit,
@@ -18,11 +21,18 @@ function LoginPage() {
   } = useForm<HookformType>({
     resolver: zodResolver(schema),
   });
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const submitform: SubmitHandler<HookformType> = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(data);
+      await dispatch(
+        signupDispatch({
+          email: data.email,
+          password: data.password,
+          username: data.username,
+        })
+      );
+      navigate("/Landing/login");
     } catch (error) {
       setError("root", {
         message: "Mail is Not Foung",
@@ -92,4 +102,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default SignUp;

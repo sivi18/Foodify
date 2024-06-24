@@ -20,11 +20,25 @@ const CartAdapter = createEntityAdapter<CartItem>({
   selectId: (item) => item.id,
 });
 const baseUrl = "http://127.0.0.1:5000";
+
+const token = sessionStorage.getItem("token");
 export const AddtoCart = createAsyncThunk(
   "/addCart",
   async (cartItem: CartItem) => {
     const { id, mealName, quantity, price, mealThumb } = cartItem;
-    return { id, mealName, quantity, price, mealThumb };
+    try {
+      const response = await axios.post(`${baseUrl}/createCart`, cartItem, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response) {
+        return { id, mealName, quantity, price, mealThumb };
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 export const UpdateCartEvent = createAsyncThunk(
@@ -40,18 +54,21 @@ export const DeleteCartEvent = createAsyncThunk(
     return { id };
   }
 );
+
 export const checkoutEvent = createAsyncThunk(
   "/checkout",
-  async (cartItems: CartItem[]) => {
+  async (cartItems) => {
     try {
       const response = await axios.post(`${baseUrl}/checkout`, cartItems, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error; // Propagate the error
     }
   }
 );

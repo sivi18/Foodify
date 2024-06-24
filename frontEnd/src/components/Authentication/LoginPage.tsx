@@ -3,7 +3,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch } from "react-redux";
 import { LoginDispatch } from "../../Redux/loginslice";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
@@ -29,7 +28,6 @@ function LoginPage() {
 
   const submitform: SubmitHandler<HookformType> = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       const res = await dispatch(
         LoginDispatch({ email: data.email, password: data.password })
       );
