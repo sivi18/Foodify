@@ -3,8 +3,9 @@ import {
   createSlice,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
+import axios from "axios";
 
-interface CartItem {
+export interface CartItem {
   id: string;
   mealName: string;
   quantity: number;
@@ -18,7 +19,7 @@ export interface UpdateCartType {
 const CartAdapter = createEntityAdapter<CartItem>({
   selectId: (item) => item.id,
 });
-
+const baseUrl = "http://127.0.0.1:5000";
 export const AddtoCart = createAsyncThunk(
   "/addCart",
   async (cartItem: CartItem) => {
@@ -39,7 +40,21 @@ export const DeleteCartEvent = createAsyncThunk(
     return { id };
   }
 );
-
+export const checkoutEvent = createAsyncThunk(
+  "/checkout",
+  async (cartItems: CartItem[]) => {
+    try {
+      const response = await axios.post(`${baseUrl}/checkout`, cartItems, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 const CartSlice = createSlice({
   name: "cart",
   initialState: CartAdapter.getInitialState({}),
@@ -56,6 +71,10 @@ const CartSlice = createSlice({
     });
     builder.addCase(DeleteCartEvent.fulfilled, (state, action) => {
       CartAdapter.removeOne(state, action.payload.id);
+    });
+    builder.addCase(checkoutEvent.fulfilled, (state, action) => {
+      console.log(action.payload);
+      CartAdapter.removeAll(state);
     });
   },
 });

@@ -2,8 +2,10 @@ import Navbar from "./Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductsCart } from "./Category/BreakFast";
 import {
+  CartItem,
   DeleteCartEvent,
   UpdateCartEvent,
+  checkoutEvent,
   selectAllCartItems,
 } from "../Redux/CartSlice";
 import { FaCartShopping } from "react-icons/fa6";
@@ -36,6 +38,13 @@ function Cart() {
       console.log(id);
       await dispatch(DeleteCartEvent(id));
       toast.success("Product removed from cart successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const Checkout = async (product: CartItem[]) => {
+    try {
+      await dispatch(checkoutEvent(product));
     } catch (error) {
       console.log(error);
     }
@@ -141,7 +150,10 @@ function Cart() {
                     </p>
                   </div>
                   <div className="block">
-                    <button className="bg-blue-800 font-medium p-3 w-full rounded-lg text-white hover:bg-blue-900 hover:font-normal transition-colors">
+                    <button
+                      onClick={() => Checkout(Carts)}
+                      className="bg-blue-800 font-medium p-3 w-full rounded-lg text-white hover:bg-blue-900 hover:font-normal transition-colors"
+                    >
                       Checkout
                     </button>
                   </div>

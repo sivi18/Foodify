@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDispatch } from "react-redux";
+import { LoginDispatch } from "../../Redux/loginslice";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   email: z.string().email(),
@@ -9,6 +13,8 @@ const schema = z.object({
 type HookformType = z.infer<typeof schema>;
 
 function LoginPage() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     formState: { errors },
     handleSubmit,
@@ -24,7 +30,12 @@ function LoginPage() {
   const submitform: SubmitHandler<HookformType> = async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(data);
+      const res = await dispatch(
+        LoginDispatch({ email: data.email, password: data.password })
+      );
+      if (res) {
+        navigate("/");
+      }
     } catch (error) {
       setError("password", { type: "custom", message: "Invalid password" });
     }

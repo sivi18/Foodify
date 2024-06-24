@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import productslice from "./Productslice";
 import CartSlice from "./CartSlice";
+import loginslice from "./loginslice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     randommeal: productslice.randommeal,
     seafood: productslice.seafood,
     cart: CartSlice,
+    login: loginslice,
   },
 });
 

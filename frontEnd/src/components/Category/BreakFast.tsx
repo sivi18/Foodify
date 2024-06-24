@@ -10,6 +10,7 @@ export interface ProductsCart {
   strMeal: string;
   strMealThumb: string;
   price: number;
+  quanity?: number;
 }
 function BreakFast() {
   const breakfast = useSelector((state: RootState) =>
