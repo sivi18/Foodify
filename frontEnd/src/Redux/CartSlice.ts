@@ -56,14 +56,18 @@ export const checkoutEvent = createAsyncThunk(
   "/checkout",
   async (cartItems) => {
     try {
-      // const response = await axios.post(`${baseUrl}/checkout`, cartItems);
-      // return response.data;
-      console.log(cartItems);
-
-      return cartItems;
+      const response = await axios.post(
+        `${baseUrl}/checkout`,
+        { cartItems },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
     } catch (error) {
       console.log(error);
-      throw error; // Propagate the error
     }
   }
 );
@@ -85,7 +89,7 @@ const CartSlice = createSlice({
       CartAdapter.removeOne(state, action.payload.id);
     });
     builder.addCase(checkoutEvent.fulfilled, (state, action) => {
-      CartAdapter.upsertMany(state, action.payload);
+      CartAdapter.removeAll(state);
     });
   },
 });

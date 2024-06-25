@@ -11,11 +11,18 @@ import {
 import { FaCartShopping } from "react-icons/fa6";
 import React from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "../Redux/store";
+import { selectAllUsers } from "../Redux/loginslice";
 
 function Cart() {
   const Carts = useSelector((state: ProductsCart[]) =>
     selectAllCartItems(state)
   );
+  const currentUser = useSelector((state: RootState) => selectAllUsers(state));
+  const username = currentUser ? currentUser[0]?.username : null;
+  console.log(username);
+
   const totalprice = Carts?.reduce((accumulator, currentItem) => {
     return accumulator + currentItem.price * currentItem.quantity;
   }, 0);
@@ -23,6 +30,7 @@ function Cart() {
   const TaxCharges = Carts?.length * 3.5;
   const CartPrice = totalprice + ShippingCharges + TaxCharges;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleChange = async (
     e: React.ChangeEvent<HTMLSelectElement>,
     id: string
@@ -43,7 +51,12 @@ function Cart() {
   };
   const Checkout = async (product: CartItem[]) => {
     try {
-      await dispatch(checkoutEvent(product));
+      setTimeout(async () => {
+        await dispatch(checkoutEvent(product));
+        toast.success("Order placed");
+      }, 1000);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -78,7 +91,7 @@ function Cart() {
                       <div className="flex flex-col z-20 mt-56 ml-4  gap-4">
                         <div className="flex items-center justify-between">
                           <h2 className="text-2xl text-green-300 select-none">
-                            {`${item.mealName.slice(0, 10)}..`}
+                            {`${item.mealName?.slice(0, 10)}..`}
                           </h2>
                           <div className="flex -ml-5">
                             <label htmlFor="quantity" className="text-white">
