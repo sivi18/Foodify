@@ -24,7 +24,7 @@ function GreetComp() {
         <div className="relative left-72">
           <Link
             to={"/menu"}
-            className="p-2 bg-yellow-400 rounded-xl w-40 h-fit flex flex-row items-center justify-center gap-5 font-medium hover:scale-105 transition-transform hover:bg-yellow-500"
+            className="p-2 bg-gradient-to-r from-slate-200 via-blue-300 to-slate-800 rounded-xl w-40 h-fit flex flex-row items-center justify-center gap-5 font-medium hover:scale-105 transition-transform hover:bg-yellow-500"
           >
             Scroll Down
             <img src={scrolldown} className="h-9 w-9"></img>
