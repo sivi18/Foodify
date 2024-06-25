@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllProducts } from "../../Redux/Productslice";
 import { Product } from "../../Redux/Productslice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
 import { RootState } from "@reduxjs/toolkit/query";
 import { ProductsCart } from "./BreakFast";
@@ -13,6 +13,7 @@ function AllCategory() {
     selectAllProducts(state)
   ) as Product[];
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const CartEvent = async (product: ProductsCart) => {
     try {
       await dispatch(
@@ -27,6 +28,8 @@ function AllCategory() {
 
       toast.success("Add to Cart");
     } catch (error) {
+      toast.error("Login to Continue");
+      navigate("/Landing/Login");
       console.log(error);
     }
   };
@@ -57,7 +60,7 @@ function AllCategory() {
 
                 <div className="flex items-center justify-between">
                   <p className="text-lg text-white select-none">
-                    Rs.{product.price}
+                    Rs. {product.price}
                   </p>
                   <Link
                     onClick={() => CartEvent(product)}

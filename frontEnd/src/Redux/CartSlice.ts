@@ -27,15 +27,7 @@ export const AddtoCart = createAsyncThunk(
   async (cartItem: CartItem) => {
     const { id, mealName, quantity, price, mealThumb } = cartItem;
     try {
-      const response = await axios.post(`${baseUrl}/createCart`, cartItem, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response) {
-        return { id, mealName, quantity, price, mealThumb };
-      }
+      return { id, mealName, quantity, price, mealThumb };
     } catch (error) {
       console.log(error);
     }
@@ -51,7 +43,12 @@ export const UpdateCartEvent = createAsyncThunk(
 export const DeleteCartEvent = createAsyncThunk(
   "/DeleteItemInCart",
   async (id: string) => {
-    return { id };
+    try {
+      // await axios.delete(`${baseUrl}/DeleteCart/${id}`);
+      return { id };
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 
@@ -59,13 +56,11 @@ export const checkoutEvent = createAsyncThunk(
   "/checkout",
   async (cartItems) => {
     try {
-      const response = await axios.post(`${baseUrl}/checkout`, cartItems, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
+      // const response = await axios.post(`${baseUrl}/checkout`, cartItems);
+      // return response.data;
+      console.log(cartItems);
+
+      return cartItems;
     } catch (error) {
       console.log(error);
       throw error; // Propagate the error
@@ -90,8 +85,7 @@ const CartSlice = createSlice({
       CartAdapter.removeOne(state, action.payload.id);
     });
     builder.addCase(checkoutEvent.fulfilled, (state, action) => {
-      console.log(action.payload);
-      CartAdapter.removeAll(state);
+      CartAdapter.upsertMany(state, action.payload);
     });
   },
 });

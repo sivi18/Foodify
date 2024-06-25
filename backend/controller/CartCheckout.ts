@@ -24,12 +24,11 @@ const checkoutCart = asyncHandler(
     }
 
     try {
-      await CartCheckout.insertMany(cartItems);
+      await CartCheckout.create({ cartItems });
       res.status(201).json({ message: "Cart items successfully stored" });
     } catch (error) {
       res.status(500).json({ message: "Internal Server Error", error });
     }
   }
 );
-
 module.exports = { checkoutCart };

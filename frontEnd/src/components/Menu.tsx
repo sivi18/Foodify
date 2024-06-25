@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
 function Menu() {
-  const [isactive, SetIsActive] = useState<string | null>("All");
+  const [isactive, setIsActive] = useState<string | null>("All");
+
   const categories: any[] = [
     {
       name: "All",
@@ -10,13 +11,14 @@ function Menu() {
     },
     {
       name: "Break Fast",
-      path: "/BreakFast",
+      path: "/breakfast",
     },
     {
       name: "Sea Foods",
       path: "/seefood",
     },
   ];
+
   return (
     <div className="relative w-full z-10 transition-transform bg-yellow-100">
       <div className="flex flex-col mt-8 items-center justify-center">
@@ -28,10 +30,9 @@ function Menu() {
             <li key={index}>
               <Link
                 to={category.path}
-                type="button"
-                onClick={() => SetIsActive(category.name)}
+                onClick={() => setIsActive(category.name)}
                 className={`select-none px-5 py-2 text-2xl ${
-                  isactive == category.name
+                  isactive === category.name
                     ? "bg-slate-800 text-white rounded-full"
                     : ""
                 } cursor-pointer transition-colors focus:bg-slate-800 focus:rounded-full focus:text-white`}

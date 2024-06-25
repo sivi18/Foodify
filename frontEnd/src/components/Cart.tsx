@@ -20,7 +20,7 @@ function Cart() {
     return accumulator + currentItem.price * currentItem.quantity;
   }, 0);
   const ShippingCharges = Carts?.length * 20;
-  const TaxCharges = Carts?.length * 8;
+  const TaxCharges = Carts?.length * 3.5;
   const CartPrice = totalprice + ShippingCharges + TaxCharges;
   const dispatch = useDispatch();
   const handleChange = async (
@@ -35,7 +35,6 @@ function Cart() {
   };
   const RemoveFromCart = async (id: string) => {
     try {
-      console.log(id);
       await dispatch(DeleteCartEvent(id));
       toast.success("Product removed from cart successfully");
     } catch (error) {

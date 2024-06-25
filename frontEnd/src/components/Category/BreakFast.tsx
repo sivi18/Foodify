@@ -54,7 +54,7 @@ function BreakFast() {
 
                 <div className="flex items-center justify-between">
                   <p className="text-lg text-white select-none">
-                    Rs.{product.price}
+                    Rs. {product.price}
                   </p>
                   <Link
                     onClick={() => CartEvent(product)}

@@ -39,3 +39,18 @@
     animation: move 1s ease-in-out;
   }
 }
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-orange-500 via-green-500 to-yellow-500 bg-clip-text text-transparent;
+  }
+}
+@layer utilities {
+  .title-gradient {
+    @apply bg-gradient-to-r from-orange-600 via-blue-500 to-yellow-500 bg-clip-text text-transparent;
+  }
+}
+@layer utilities {
+  .greet-gradient {
+    @apply bg-gradient-to-r from-purple-600 via-yellow-500 to-slate-800 bg-clip-text text-transparent;
+  }
+}

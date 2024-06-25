@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { RootState } from "../Redux/store";
+import { selectAllCartItems } from "../Redux/CartSlice";
 
 function Navbar() {
+  const cartItem = useSelector((state: RootState) => selectAllCartItems(state));
+  const cartLength = cartItem?.length;
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
@@ -51,10 +56,17 @@ function Navbar() {
           </li>
           <li>
             <Link
-              className="p-2 flex gap-2 text-white hover:text-orange-300"
+              className="p-2 flex gap-2 text-white hover:text-orange-300 relative"
               to={"/cart"}
             >
-              <FaCartShopping size={25} className="move-animation" />
+              <div className="relative">
+                <FaCartShopping size={25} className="move-animation" />
+                {cartLength >= 0 ? (
+                  <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {cartLength}
+                  </span>
+                ) : null}
+              </div>
               Cart
             </Link>
           </li>

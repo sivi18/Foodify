@@ -56,7 +56,7 @@ function MeatCategory() {
               </h2>
               <div className="flex items-center justify-between">
                 <p className="text-lg text-white select-none">
-                  Rs.{item.price}
+                  Rs. {item.price}
                 </p>
                 <Link
                   onClick={() => CartEvent(item)}
