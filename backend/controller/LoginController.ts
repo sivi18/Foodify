@@ -34,7 +34,6 @@ const signupUser = asyncHandler(async (req: Request, res: Response) => {
 
   res.status(201).json({ message: "User created successfully" });
 });
-
 const loginUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
@@ -53,7 +52,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
     expiresIn: "1h",
   });
   const { _id, username } = user;
-  res.status(200).json({ _id, username, token });
+  res.status(200).json({ _id, username, email: user.email, token });
 });
 
 module.exports = { signupUser, loginUser };

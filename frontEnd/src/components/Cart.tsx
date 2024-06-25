@@ -21,7 +21,7 @@ function Cart() {
   );
   const currentUser = useSelector((state: RootState) => selectAllUsers(state));
   const username = currentUser ? currentUser[0]?.username : null;
-  console.log(username);
+  const useremail = currentUser ? currentUser[0]?.email : null;
 
   const totalprice = Carts?.reduce((accumulator, currentItem) => {
     return accumulator + currentItem.price * currentItem.quantity;
@@ -52,7 +52,9 @@ function Cart() {
   const Checkout = async (product: CartItem[]) => {
     try {
       setTimeout(async () => {
-        await dispatch(checkoutEvent(product));
+        await dispatch(
+          checkoutEvent({ product, username: username, email: useremail })
+        );
         toast.success("Order placed");
       }, 1000);
       await new Promise((resolve) => setTimeout(resolve, 1000));

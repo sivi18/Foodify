@@ -11,6 +11,7 @@ import { RootState } from "./store"; // Adjust the import based on your store fi
 interface User {
   _id?: string;
   username?: string;
+  email?: string;
   token: string;
 }
 

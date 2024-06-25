@@ -17,15 +17,23 @@ const CartItemSchema = new Schema<CartItemType>({
 });
 
 export interface CartCheckoutType extends Document {
+  username: string;
+  email: string;
   cartItems: CartItemType[];
 }
-const CartCheckoutSchema = new Schema<CartCheckoutType>({
-  cartItems: { type: [CartItemSchema], required: true },
-});
+
+const CartCheckoutSchema = new Schema<CartCheckoutType>(
+  {
+    username: { type: String, required: true },
+    email: { type: String, required: true },
+    cartItems: { type: [CartItemSchema], required: true },
+  },
+  { timestamps: true }
+);
 
 const CartCheckout = mongoose.model<CartCheckoutType>(
   "CartCheckout",
   CartCheckoutSchema
 );
 
-module.exports = { CartCheckout };
+export { CartCheckout };

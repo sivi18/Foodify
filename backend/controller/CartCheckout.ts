@@ -1,9 +1,10 @@
-const asyncHandler = require("express-async-handler");
 import { Request, Response } from "express";
-const { CartCheckout } = require("../model/CheckoutModel");
-
+import { CartCheckout } from "../model/CheckoutModel";
+const asyncHandler = require("express-async-handler");
 interface CreateItemRequest extends Request {
   body: {
+    username: string;
+    email: string;
     cartItems: Array<{
       id: string;
       mealName: string;
@@ -16,19 +17,29 @@ interface CreateItemRequest extends Request {
 
 const checkoutCart = asyncHandler(
   async (req: CreateItemRequest, res: Response) => {
-    const { cartItems } = req.body;
-    console.log(cartItems);
+    const { username, email, cartItems } = req.body;
+    console.log(username, email, cartItems);
 
-    if (!Array.isArray(cartItems) || cartItems.length === 0) {
-      return res.status(400).json({ message: "Cart items are required" });
+    if (
+      !username ||
+      !email ||
+      !cartItems ||
+      !Array.isArray(cartItems) ||
+      cartItems.length === 0
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Username, email, and cart items are required" });
     }
 
     try {
-      await CartCheckout.create({ cartItems });
+      const newCart = new CartCheckout({ username, email, cartItems });
+      await newCart.save();
       res.status(201).json({ message: "Cart items successfully stored" });
     } catch (error) {
       res.status(500).json({ message: "Internal Server Error", error });
     }
   }
 );
-module.exports = { checkoutCart };
+
+export { checkoutCart };

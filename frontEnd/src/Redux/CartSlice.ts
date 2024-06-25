@@ -21,7 +21,6 @@ const CartAdapter = createEntityAdapter<CartItem>({
 });
 const baseUrl = "http://127.0.0.1:5000";
 
-const token = sessionStorage.getItem("token");
 export const AddtoCart = createAsyncThunk(
   "/addCart",
   async (cartItem: CartItem) => {
@@ -44,7 +43,6 @@ export const DeleteCartEvent = createAsyncThunk(
   "/DeleteItemInCart",
   async (id: string) => {
     try {
-      // await axios.delete(`${baseUrl}/DeleteCart/${id}`);
       return { id };
     } catch (error) {
       console.log(error);
@@ -52,13 +50,22 @@ export const DeleteCartEvent = createAsyncThunk(
   }
 );
 
+interface CheckoutPayload {
+  username: string;
+  email: string;
+  product: CartItem[];
+}
+
 export const checkoutEvent = createAsyncThunk(
-  "/checkout",
-  async (cartItems) => {
+  "checkout/checkoutEvent",
+  async (payload: CheckoutPayload, { rejectWithValue }) => {
+    const { username, email, product } = payload;
+    console.log(username, email, product);
+
     try {
       const response = await axios.post(
         `${baseUrl}/checkout`,
-        { cartItems },
+        { username, email, cartItems: product },
         {
           headers: {
             "Content-Type": "application/json",
@@ -67,7 +74,11 @@ export const checkoutEvent = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue(error.message);
+      }
     }
   }
 );
