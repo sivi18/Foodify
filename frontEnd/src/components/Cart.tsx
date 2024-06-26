@@ -53,7 +53,12 @@ function Cart() {
     try {
       setTimeout(async () => {
         await dispatch(
-          checkoutEvent({ product, username: username, email: useremail })
+          checkoutEvent({
+            product,
+            username: username,
+            email: useremail,
+            totalprice: CartPrice,
+          })
         );
         toast.success("Order placed");
       }, 1000);

@@ -7,7 +7,7 @@ function GreetComp() {
   const user = useSelector((state: RootState) => selectAllUsers(state));
 
   return (
-    <div className="absolute top-72 mt-10 h-[400px] w-[550px]">
+    <div className="absolute top-72 mt-10 h-[410px] w-[550px]">
       <div className="flex flex-col gap-5 ml-6">
         <h1 className="text-7xl title-gradient ml-3 select-none">
           Foodify App
@@ -16,7 +16,7 @@ function GreetComp() {
           Welcome's You
         </h1>
         {user && (
-          <h1 className="text-6xl ml-3 text-gradient selection:bg-orange-300 selection:text-white">
+          <h1 className="text-6xl ml-3 p-2 text-gradient selection:bg-orange-300 selection:text-white">
             {user[0]?.username}
           </h1>
         )}

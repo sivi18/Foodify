@@ -5,6 +5,7 @@ interface CreateItemRequest extends Request {
   body: {
     username: string;
     email: string;
+    totalprice: number;
     cartItems: Array<{
       id: string;
       mealName: string;
@@ -17,13 +18,13 @@ interface CreateItemRequest extends Request {
 
 const checkoutCart = asyncHandler(
   async (req: CreateItemRequest, res: Response) => {
-    const { username, email, cartItems } = req.body;
-    console.log(username, email, cartItems);
+    const { username, email, cartItems, totalprice } = req.body;
 
     if (
       !username ||
       !email ||
       !cartItems ||
+      !totalprice ||
       !Array.isArray(cartItems) ||
       cartItems.length === 0
     ) {
@@ -33,7 +34,12 @@ const checkoutCart = asyncHandler(
     }
 
     try {
-      const newCart = new CartCheckout({ username, email, cartItems });
+      const newCart = new CartCheckout({
+        username,
+        email,
+        cartItems,
+        totalprice,
+      });
       await newCart.save();
       res.status(201).json({ message: "Cart items successfully stored" });
     } catch (error) {

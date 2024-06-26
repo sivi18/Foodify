@@ -19,6 +19,7 @@ const CartItemSchema = new Schema<CartItemType>({
 export interface CartCheckoutType extends Document {
   username: string;
   email: string;
+  totalprice: number;
   cartItems: CartItemType[];
 }
 
@@ -26,6 +27,7 @@ const CartCheckoutSchema = new Schema<CartCheckoutType>(
   {
     username: { type: String, required: true },
     email: { type: String, required: true },
+    totalprice: { type: Number, required: true },
     cartItems: { type: [CartItemSchema], required: true },
   },
   { timestamps: true }

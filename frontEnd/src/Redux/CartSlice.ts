@@ -53,19 +53,20 @@ export const DeleteCartEvent = createAsyncThunk(
 interface CheckoutPayload {
   username: string;
   email: string;
+  totalprice: number;
   product: CartItem[];
 }
 
 export const checkoutEvent = createAsyncThunk(
   "checkout/checkoutEvent",
   async (payload: CheckoutPayload, { rejectWithValue }) => {
-    const { username, email, product } = payload;
+    const { username, email, product, totalprice } = payload;
     console.log(username, email, product);
 
     try {
       const response = await axios.post(
         `${baseUrl}/checkout`,
-        { username, email, cartItems: product },
+        { username, email, cartItems: product, totalprice },
         {
           headers: {
             "Content-Type": "application/json",
