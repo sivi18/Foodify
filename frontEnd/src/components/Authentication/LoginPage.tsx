@@ -4,10 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch } from "react-redux";
 import { LoginDispatch } from "../../Redux/loginslice";
 import { useNavigate } from "react-router-dom";
+import { setToken } from "../../Redux/TokenSlice";
 
 const schema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string(),
 });
 type HookformType = z.infer<typeof schema>;
 
@@ -31,7 +32,23 @@ function LoginPage() {
       const res = await dispatch(
         LoginDispatch({ email: data.email, password: data.password })
       );
+
       if (res) {
+        (async () => {
+          try {
+            await dispatch(setToken({ token: res?.payload?.token }));
+          } catch (error) {
+            console.log("Token Not Stored");
+          }
+        })();
+      }
+      if (res.error) {
+        if (res.error?.message.includes("email")) {
+          setError("email", { type: "custom", message: "Invalid email" });
+        } else {
+          setError("password", { type: "custom", message: "Invalid password" });
+        }
+      } else {
         navigate("/");
       }
     } catch (error) {

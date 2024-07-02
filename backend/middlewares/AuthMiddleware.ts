@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import UserModel from "../model/userModel";
 const jwt = require("jsonwebtoken");
+
 interface AuthenticatedRequest extends Request {
   user?: any;
 }
@@ -10,7 +11,9 @@ const authMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.header("Authorization")?.replace("Bearer ", "");
+  const token = req.header("Authorization")?.replace("Bearer", "");
+  console.log(token);
+
   if (!token) {
     return res
       .status(401)
@@ -20,6 +23,8 @@ const authMiddleware = async (
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
       id: string;
     };
+    console.log(decoded);
+
     req.user = await UserModel.findById(decoded.id).select("-password");
     if (!req.user) {
       return res

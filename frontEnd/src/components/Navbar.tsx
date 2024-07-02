@@ -1,18 +1,26 @@
 import { useEffect, useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../Redux/store";
 import { selectAllCartItems } from "../Redux/CartSlice";
+import { removeToken } from "../Redux/TokenSlice";
 
 function Navbar() {
   const cartItem = useSelector((state: RootState) => selectAllCartItems(state));
   const cartLength = cartItem?.length;
   const [animate, setAnimate] = useState(false);
+  const userExists = useSelector((state: RootState) => state.token.token);
 
   useEffect(() => {
     setAnimate(true);
   }, []);
+  const dispatch = useDispatch();
+  async function signout() {
+    try {
+      await dispatch(removeToken({}));
+    } catch (error) {}
+  }
   return (
     <nav className="fixed min-w-full py-5 px-2 gap-96 h-10 z-30">
       <div className="flex items-center justify-between  bg-slate-900 p-5 rounded-xl backdrop-blur-sm backdrop-filter">
@@ -38,22 +46,26 @@ function Navbar() {
               Home
             </Link>
           </li>
-          <li>
-            <Link
-              to={"/"}
-              className="font-sans p-2 text-lg text-white hover:text-orange-300 rounded-lg"
-            >
-              Menu
-            </Link>
-          </li>
-          <li>
-            <Link
-              to={"/Landing/login"}
-              className="font-sans p-2 text-lg text-white hover:text-orange-300 rounded-lg"
-            >
-              Login
-            </Link>
-          </li>
+          {userExists ? (
+            <li>
+              <Link
+                className="font-sans p-2 text-lg text-white hover:text-orange-300 rounded-lg"
+                onClick={signout}
+              >
+                Sign out
+              </Link>
+            </li>
+          ) : (
+            <li>
+              <Link
+                className="font-sans p-2 text-lg text-white hover:text-orange-300 rounded-lg"
+                to={"/Landing/login"}
+              >
+                Login
+              </Link>
+            </li>
+          )}
+
           <li>
             <Link
               className="p-2 flex gap-2 text-white hover:text-orange-300 relative"

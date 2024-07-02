@@ -4,6 +4,7 @@ import {
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 import axios from "axios";
+import useGetToken from "../components/token";
 
 export interface CartItem {
   id: string;

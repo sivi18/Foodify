@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import productslice from "./Productslice";
 import CartSlice from "./CartSlice";
 import loginslice from "./loginslice";
+import TokenSlice from "./TokenSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     seafood: productslice.seafood,
     cart: CartSlice,
     login: loginslice,
+    token: TokenSlice,
   },
 });
 
