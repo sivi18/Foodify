@@ -5,7 +5,6 @@ import { Provider } from "react-redux";
 import store from "./Redux/store";
 import App from "./App";
 import AllCategory from "./components/Category/Category";
-import Menu from "./components/Menu";
 import BreakFast from "./components/Category/BreakFast";
 import MeatCategory from "./components/Category/MeatCategory";
 import Cart from "./components/Cart";
@@ -21,6 +20,7 @@ import {
   fetchSpecialIngredientMeal,
 } from "./Redux/Productslice";
 import ProtectedRoute from "./components/Authentication/ProtectedRoute";
+import SuccessCart from "./components/successCart";
 
 // Fetch initial data
 store.dispatch(fetchProduct());
@@ -58,6 +58,10 @@ const router = createBrowserRouter([
   {
     path: "/cart",
     element: <Cart />,
+  },
+  {
+    path: "/success",
+    element: <SuccessCart />,
   },
   {
     path: "/Landing",

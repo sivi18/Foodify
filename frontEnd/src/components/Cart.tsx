@@ -1,6 +1,10 @@
-import Navbar from "./Navbar";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ProductsCart } from "./Category/BreakFast";
+import { FaCartShopping } from "react-icons/fa6";
+import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
+import { loadStripe } from "@stripe/stripe-js";
+import Navbar from "./Navbar";
 import {
   CartItem,
   DeleteCartEvent,
@@ -8,17 +12,15 @@ import {
   checkoutEvent,
   selectAllCartItems,
 } from "../Redux/CartSlice";
-import { FaCartShopping } from "react-icons/fa6";
-import React from "react";
-import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { RootState } from "../Redux/store";
 import { selectAllUsers } from "../Redux/loginslice";
+import { ProductsCart } from "./Category/BreakFast";
 
 function Cart() {
   const Carts = useSelector((state: ProductsCart[]) =>
     selectAllCartItems(state)
   );
+  const [publishableKey, setPublishableKey] = useState("");
   const currentUser = useSelector((state: RootState) => selectAllUsers(state));
   const username = currentUser ? currentUser[0]?.username : null;
   const useremail = currentUser ? currentUser[0]?.email : null;
@@ -29,19 +31,29 @@ function Cart() {
   const ShippingCharges = Carts?.length * 20;
   const TaxCharges = Carts?.length * 3.5;
   const CartPrice = totalprice + ShippingCharges + TaxCharges;
+
+  useEffect(() => {
+    async function fetchKey() {
+      const response = await axios.get("http://localhost:5000/getKey");
+      setPublishableKey(response.data?.publishableKey);
+    }
+    fetchKey();
+  }, []);
+
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const handleChange = async (
     e: React.ChangeEvent<HTMLSelectElement>,
     id: string
   ) => {
     try {
-      await dispatch(UpdateCartEvent({ quantity: e.target.value, id: id }));
+      await dispatch(UpdateCartEvent({ quantity: e.target.value, id }));
     } catch (error) {
       console.log(error);
     }
   };
-  const RemoveFromCart = async (id: string) => {
+
+  const removeFromCart = async (id: string) => {
     try {
       await dispatch(DeleteCartEvent(id));
       toast.success("Product removed from cart successfully");
@@ -49,25 +61,28 @@ function Cart() {
       console.log(error);
     }
   };
-  const Checkout = async (product: CartItem[]) => {
+
+  const checkout = async (products: CartItem[]) => {
     try {
-      setTimeout(async () => {
-        await dispatch(
-          checkoutEvent({
-            product,
-            username: username,
-            email: useremail,
-            totalprice: CartPrice,
-          })
-        );
-        toast.success("Order placed");
-      }, 1000);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      navigate("/");
+      const stripe = await loadStripe(publishableKey);
+      const response = await dispatch(
+        checkoutEvent({
+          product: products,
+          username,
+          email: useremail,
+          totalprice: CartPrice,
+        })
+      );
+      const sessionId = response?.payload?.id;
+      console.log("Session ID:", sessionId);
+      await stripe?.redirectToCheckout({ sessionId });
+      toast.success("Redirecting to Stripe Checkout...");
     } catch (error) {
       console.log(error);
+      toast.error("Error during checkout. Please try again.");
     }
   };
+
   return (
     <div className="flex flex-col min-h-screen bg-slate-900">
       <div className="flex flex-col">
@@ -95,18 +110,17 @@ function Cart() {
                           />
                         </div>
                       </div>
-                      <div className="flex flex-col z-20 mt-56 ml-4  gap-4">
+                      <div className="flex flex-col z-20 mt-56 ml-4 gap-4">
                         <div className="flex items-center justify-between">
                           <h2 className="text-2xl text-green-300 select-none">
                             {`${item.mealName?.slice(0, 10)}..`}
                           </h2>
                           <div className="flex -ml-5">
                             <label htmlFor="quantity" className="text-white">
-                              Quanity
+                              Quantity
                             </label>
                             <select
                               onChange={(e) => handleChange(e, item.id)}
-                              name=""
                               id="quantity"
                               className="bg-slate-800 text-white outline-none border-none ml-2"
                             >
@@ -120,13 +134,12 @@ function Cart() {
                             </select>
                           </div>
                         </div>
-
                         <div className="flex items-center justify-between">
                           <p className="text-lg text-white select-none">
                             Rs. {item.price}
                           </p>
                           <button
-                            onClick={() => RemoveFromCart(item.id)}
+                            onClick={() => removeFromCart(item.id)}
                             className="select-none flex font-medium items-center gap-2 mr-5 bg-red-500 text-white rounded-full p-2 hover:bg-orange-300 hover:scale-105 transition-transform"
                           >
                             Remove
@@ -146,7 +159,7 @@ function Cart() {
                 <h1 className="text-4xl text-blue-600 text-start mt-5">
                   Order summary
                 </h1>
-                <div className="flex flex-col gap-5 mt-7 ">
+                <div className="flex flex-col gap-5 mt-7">
                   <div className="flex items-center justify-between ml-2">
                     <p className="text-white text-lg">Sub Total</p>
                     <p className="text-white text-lg">Rs. {totalprice}</p>
@@ -170,7 +183,7 @@ function Cart() {
                   </div>
                   <div className="block">
                     <button
-                      onClick={() => Checkout(Carts)}
+                      onClick={() => checkout(Carts)}
                       className="bg-blue-800 font-medium p-3 w-full rounded-lg text-white hover:bg-blue-900 hover:font-normal transition-colors"
                     >
                       Checkout
